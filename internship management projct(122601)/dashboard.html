@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Internship Tracker - Dashboard</title>
+    <link rel="stylesheet" href="css/liquid-glass.css">
+</head>
+
+<body>
+
+    <div class="app-layout">
+
+        <!-- =========================
+             A. LEFT SIDEBAR
+        ========================= -->
+        <aside class="sidebar">
+            <div>
+                <!-- Brand Header -->
+                <div class="sidebar-header">
+                    <div class="brand-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                            <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                        </svg>
+                    </div>
+                    <div class="brand-title">
+                        Student
+                        <span>Internship Tracker</span>
+                    </div>
+                </div>
+
+                <!-- Navigation Items in exact order -->
+                <nav class="sidebar-nav">
+                    <a href="dashboard.html" class="nav-link active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                        Dashboard
+                    </a>
+
+                    <a href="internships.html" class="nav-link">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <rect width="20" height="14" x="2" y="7" rx="2" ry="2"/>
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                        </svg>
+                        Internships
+                    </a>
+
+                    <a href="add-internship.html" class="nav-link">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        Add Internship
+                    </a>
+
+                    <a href="profile.html" class="nav-link">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        Profile
+                    </a>
+
+                    <a href="settings.html" class="nav-link">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                        </svg>
+                        Settings
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Bottom: Logout -->
+            <div class="sidebar-footer">
+                <a href="login.html" class="nav-link logout-link">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- =========================
+             MAIN APPLICATION SHELL
+        ========================= -->
+        <main class="main-shell">
+
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="search-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="11" cy="11" r="8"/>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                    <input type="text" id="globalSearch" placeholder="Search internships, companies, or roles...">
+                </div>
+
+                <div class="header-right">
+                    <button class="notification-btn" aria-label="Notifications">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                        </svg>
+                        <span class="notification-badge">1</span>
+                    </button>
+
+                    <div class="user-profile-menu" onclick="window.location.href='profile.html'">
+                        <div class="user-avatar" id="headerAvatar">AK</div>
+                        <div class="user-meta">
+                            <span class="user-name" id="headerUserName">Aravind Kumar</span>
+                            <span class="user-role">Student</span>
+                        </div>
+                        <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrollable Content Body -->
+            <div class="dashboard-content-scroll">
+                <div class="dashboard-grid">
+
+                    <!-- ==============================================
+                         B. CENTER DASHBOARD AREA
+                    =============================================== -->
+                    <div class="center-column">
+
+                        <!-- 1. Top Overview Row: Welcome Banner + 4 Stat Cards -->
+                        <div class="overview-row">
+                            <!-- Welcome Banner with landscape lower texture -->
+                            <div class="glass-card welcome-card">
+                                <div>
+                                    <h2 id="welcomeGreeting">Good Morning, Aravind! ??</h2>
+                                    <p>Here's your internship progress at a glance.</p>
+                                </div>
+                            </div>
+
+                            <!-- Four Glass Stat Cards -->
+                            <div class="stats-grid">
+                                <!-- Stat 1: Total Applications -->
+                                <div class="stat-card">
+                                    <div class="stat-top">
+                                        <div class="stat-icon icon-blue">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <rect width="20" height="14" x="2" y="7" rx="2" ry="2"/>
+                                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                                            </svg>
+                                        </div>
+                                        <span class="stat-label">Total Applications</span>
+                                    </div>
+                                    <div class="stat-number" id="statTotal">8</div>
+                                    <div class="stat-trend trend-up">
+                                        <span>? 2 this month</span>
+                                    </div>
+                                </div>
+
+                                <!-- Stat 2: Interviews -->
+                                <div class="stat-card">
+                                    <div class="stat-top">
+                                        <div class="stat-icon icon-purple">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                                                <line x1="16" y1="2" x2="16" y2="6"/>
+                                                <line x1="8" y1="2" x2="8" y2="6"/>
+                                                <line x1="3" y1="10" x2="21" y2="10"/>
+                                            </svg>
+                                        </div>
+                                        <span class="stat-label">Interviews</span>
+                                    </div>
+                                    <div class="stat-number" id="statInterviews">3</div>
+                                    <div class="stat-trend trend-up">
+                                        <span>? 1 this month</span>
+                                    </div>
+                                </div>
+
+                                <!-- Stat 3: Selected -->
+                                <div class="stat-card">
+                                    <div class="stat-top">
+                                        <div class="stat-icon icon-teal">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+                                                <path d="m9 12 2 2 4-4"/>
+                                            </svg>
+                                        </div>
+                                        <span class="stat-label">Selected</span>
+                                    </div>
+                                    <div class="stat-number" id="statSelected">2</div>
+                                    <div class="stat-trend trend-up">
+                                        <span>? 1 this month</span>
+                                    </div>
+                                </div>
+
+                                <!-- Stat 4: Rejected -->
+                                <div class="stat-card">
+                                    <div class="stat-top">
+                                        <div class="stat-icon icon-pink">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <circle cx="12" cy="12" r="10"/>
+                                                <line x1="15" y1="9" x2="9" y2="15"/>
+                                                <line x1="9" y1="9" x2="15" y2="15"/>
+                                            </svg>
+                                        </div>
+                                        <span class="stat-label">Rejected</span>
+                                    </div>
+                                    <div class="stat-number" id="statRejected">1</div>
+                                    <div class="stat-trend trend-down">
+                                        <span>? 1 this month</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. Middle Row: Donut Chart + Upcoming Deadlines -->
+                        <div class="middle-row">
+                            <!-- Application Status Overview Card -->
+                            <div class="glass-card">
+                                <div class="card-header-flex">
+                                    <h3 class="card-title">Application Status Overview</h3>
+                                    <select class="glass-select">
+                                        <option>This Month</option>
+                                        <option>Last 3 Months</option>
+                                        <option>All Time</option>
+                                    </select>
+                                </div>
+
+                                <div class="donut-card-content">
+                                    <!-- Donut SVG Chart -->
+                                    <div class="donut-wrapper">
+                                        <svg class="donut-svg" viewBox="0 0 100 100">
+                                            <!-- Ring Background -->
+                                            <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="12"/>
+                                            <!-- Segment 1: Applied (Cyan) ~37.5% -->
+                                            <circle cx="50" cy="50" r="40" fill="none" stroke="#06b6d4" stroke-width="12"
+                                                    stroke-dasharray="94.2 251.2" stroke-dashoffset="0"/>
+                                            <!-- Segment 2: Interview (Teal) ~25% -->
+                                            <circle cx="50" cy="50" r="40" fill="none" stroke="#10b981" stroke-width="12"
+                                                    stroke-dasharray="62.8 251.2" stroke-dashoffset="-94.2"/>
+                                            <!-- Segment 3: Selected (Purple) ~25% -->
+                                            <circle cx="50" cy="50" r="40" fill="none" stroke="#8b5cf6" stroke-width="12"
+                                                    stroke-dasharray="62.8 251.2" stroke-dashoffset="-157"/>
+                                            <!-- Segment 4: Rejected (Pink/Red) ~12.5% -->
+                                            <circle cx="50" cy="50" r="40" fill="none" stroke="#f43f5e" stroke-width="12"
+                                                    stroke-dasharray="31.4 251.2" stroke-dashoffset="-219.8"/>
+                                        </svg>
+                                        <div class="donut-center-text">
+                                            <div class="donut-center-number" id="donutTotalCount">8</div>
+                                            <div class="donut-center-label">Total</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Legend with exact counts -->
+                                    <div class="donut-legend">
+                                        <div class="legend-item">
+                                            <div class="legend-label-group">
+                                                <span class="legend-dot dot-cyan"></span>
+                                                <span>Applied</span>
+                                            </div>
+                                            <span class="legend-count" id="legendApplied">3</span>
+                                        </div>
+                                        <div class="legend-item">
+                                            <div class="legend-label-group">
+                                                <span class="legend-dot dot-teal"></span>
+                                                <span>Interview</span>
+                                            </div>
+                                            <span class="legend-count" id="legendInterview">2</span>
+                                        </div>
+                                        <div class="legend-item">
+                                            <div class="legend-label-group">
+                                                <span class="legend-dot dot-purple"></span>
+                                                <span>Selected</span>
+                                            </div>
+                                            <span class="legend-count" id="legendSelected">2</span>
+                                        </div>
+                                        <div class="legend-item">
+                                            <div class="legend-label-group">
+                                                <span class="legend-dot dot-red"></span>
+                                                <span>Rejected</span>
+                                            </div>
+                                            <span class="legend-count" id="legendRejected">1</span>
+                                        </div>
+                                        <div class="legend-item">
+                                            <div class="legend-label-group">
+                                                <span class="legend-dot dot-gray"></span>
+                                                <span>Completed</span>
+                                            </div>
+                                            <span class="legend-count" id="legendCompleted">0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Upcoming Deadlines Card -->
+                            <div class="glass-card">
+                                <div class="card-header-flex">
+                                    <h3 class="card-title">Upcoming Deadlines</h3>
+                                    <a href="internships.html" class="view-all-link">View All ?</a>
+                                </div>
+
+                                <div class="deadline-list">
+                                    <div class="deadline-item">
+                                        <div class="deadline-info">
+                                            <div class="company-logo logo-tcs">tcs</div>
+                                            <div class="deadline-text">
+                                                <h4>TCS</h4>
+                                                <p>Java Developer Intern . Apr 25, 2025</p>
+                                            </div>
+                                        </div>
+                                        <span class="badge badge-urgent">Urgent</span>
+                                    </div>
+
+                                    <div class="deadline-item">
+                                        <div class="deadline-info">
+                                            <div class="company-logo logo-infosys">infy</div>
+                                            <div class="deadline-text">
+                                                <h4>Infosys</h4>
+                                                <p>Web Development Intern . Apr 30, 2025</p>
+                                            </div>
+                                        </div>
+                                        <span class="badge badge-soon">Soon</span>
+                                    </div>
+
+                                    <div class="deadline-item">
+                                        <div class="deadline-info">
+                                            <div class="company-logo logo-zoho">zoho</div>
+                                            <div class="deadline-text">
+                                                <h4>Zoho</h4>
+                                                <p>Software Intern . May 05, 2025</p>
+                                            </div>
+                                        </div>
+                                        <span class="badge badge-upcoming">Upcoming</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. Lower Row: Recent Internships Table -->
+                        <div class="glass-card">
+                            <div class="card-header-flex">
+                                <h3 class="card-title">Recent Internships</h3>
+                                <a href="internships.html" class="view-all-link">View All ?</a>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="glass-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Company</th>
+                                            <th>Role</th>
+                                            <th>Type</th>
+                                            <th>Status</th>
+                                            <th>Applied On</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentInternshipsBody">
+                                        <tr>
+                                            <td>
+                                                <div class="company-cell">
+                                                    <div class="company-logo logo-tcs">tcs</div>
+                                                    <span>TCS</span>
+                                                </div>
+                                            </td>
+                                            <td>Java Developer Intern</td>
+                                            <td><span class="type-pill type-remote">Remote</span></td>
+                                            <td><span class="status-pill status-interview">Interview</span></td>
+                                            <td>Apr 10, 2025</td>
+                                            <td><button class="action-dots-btn">...</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="company-cell">
+                                                    <div class="company-logo logo-infosys">infy</div>
+                                                    <span>Infosys</span>
+                                                </div>
+                                            </td>
+                                            <td>Web Development Intern</td>
+                                            <td><span class="type-pill type-hybrid">Hybrid</span></td>
+                                            <td><span class="status-pill status-applied">Applied</span></td>
+                                            <td>Apr 8, 2025</td>
+                                            <td><button class="action-dots-btn">...</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="company-cell">
+                                                    <div class="company-logo logo-zoho">zoho</div>
+                                                    <span>Zoho</span>
+                                                </div>
+                                            </td>
+                                            <td>Software Intern</td>
+                                            <td><span class="type-pill type-onsite">On-site</span></td>
+                                            <td><span class="status-pill status-selected">Selected</span></td>
+                                            <td>Apr 5, 2025</td>
+                                            <td><button class="action-dots-btn">...</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="company-cell">
+                                                    <div class="company-logo logo-accenture">&gt;</div>
+                                                    <span>Accenture</span>
+                                                </div>
+                                            </td>
+                                            <td>Data Analyst Intern</td>
+                                            <td><span class="type-pill type-remote">Remote</span></td>
+                                            <td><span class="status-pill status-rejected">Rejected</span></td>
+                                            <td>Mar 28, 2025</td>
+                                            <td><button class="action-dots-btn">...</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- ==============================================
+                         C. RIGHT INFORMATION PANEL
+                    =============================================== -->
+                    <div class="right-column">
+
+                        <!-- 1. Recent Activity Card -->
+                        <div class="glass-card">
+                            <div class="card-header-flex">
+                                <h3 class="card-title">Recent Activity</h3>
+                                <a href="internships.html" class="view-all-link">View All ?</a>
+                            </div>
+
+                            <div class="activity-list">
+                                <div class="activity-item">
+                                    <div class="activity-icon-badge act-green">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                            <polyline points="20 6 9 17 4 12"/>
+                                        </svg>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p>You updated the status of TCS to Interview</p>
+                                        <span class="activity-time">2 hours ago</span>
+                                    </div>
+                                </div>
+
+                                <div class="activity-item">
+                                    <div class="activity-icon-badge act-blue">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                            <line x1="12" y1="5" x2="12" y2="19"/>
+                                            <line x1="5" y1="12" x2="19" y2="12"/>
+                                        </svg>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p>You added a new internship at Zoho</p>
+                                        <span class="activity-time">5 hours ago</span>
+                                    </div>
+                                </div>
+
+                                <div class="activity-item">
+                                    <div class="activity-icon-badge act-blue">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                                            <circle cx="12" cy="7" r="4"/>
+                                        </svg>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p>You updated your profile</p>
+                                        <span class="activity-time">1 day ago</span>
+                                    </div>
+                                </div>
+
+                                <div class="activity-item">
+                                    <div class="activity-icon-badge act-purple">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                            <line x1="22" y1="2" x2="11" y2="13"/>
+                                            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                                        </svg>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p>You applied for Infosys</p>
+                                        <span class="activity-time">1 day ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. Calendar and Upcoming Events Card -->
+                        <div class="glass-card">
+                            <div class="calendar-header">
+                                <h3 class="card-title">Calendar</h3>
+                                <div class="calendar-nav-buttons">
+                                    <button class="cal-btn" id="prevMonthBtn"><</button>
+                                    <span class="calendar-month" id="calendarMonthYear">April 2025</span>
+                                    <button class="cal-btn" id="nextMonthBtn">></button>
+                                </div>
+                            </div>
+
+                            <!-- Calendar Grid -->
+                            <div class="calendar-grid">
+                                <span class="cal-day-name">Sun</span>
+                                <span class="cal-day-name">Mon</span>
+                                <span class="cal-day-name">Tue</span>
+                                <span class="cal-day-name">Wed</span>
+                                <span class="cal-day-name">Thu</span>
+                                <span class="cal-day-name">Fri</span>
+                                <span class="cal-day-name">Sat</span>
+
+                                <span class="cal-day"></span>
+                                <span class="cal-day"></span>
+                                <span class="cal-day">1</span>
+                                <span class="cal-day">2</span>
+                                <span class="cal-day">3</span>
+                                <span class="cal-day">4</span>
+                                <span class="cal-day has-event">5</span>
+
+                                <span class="cal-day">6</span>
+                                <span class="cal-day">7</span>
+                                <span class="cal-day has-event">8</span>
+                                <span class="cal-day">9</span>
+                                <span class="cal-day has-event">10</span>
+                                <span class="cal-day">11</span>
+                                <span class="cal-day">12</span>
+
+                                <span class="cal-day">13</span>
+                                <span class="cal-day">14</span>
+                                <span class="cal-day">15</span>
+                                <span class="cal-day">16</span>
+                                <span class="cal-day">17</span>
+                                <span class="cal-day">18</span>
+                                <span class="cal-day">19</span>
+
+                                <span class="cal-day">20</span>
+                                <span class="cal-day">21</span>
+                                <span class="cal-day">22</span>
+                                <span class="cal-day">23</span>
+                                <span class="cal-day active">24</span>
+                                <span class="cal-day has-event">25</span>
+                                <span class="cal-day">26</span>
+
+                                <span class="cal-day">27</span>
+                                <span class="cal-day">28</span>
+                                <span class="cal-day">29</span>
+                                <span class="cal-day has-event">30</span>
+                                <span class="cal-day"></span>
+                                <span class="cal-day"></span>
+                                <span class="cal-day"></span>
+                            </div>
+
+                            <!-- Upcoming Events in Calendar -->
+                            <div class="events-divider"></div>
+
+                            <div class="card-header-flex" style="margin-bottom: 10px;">
+                                <span style="font-size: 13px; font-weight: 600; color: var(--text-secondary);">Upcoming Events</span>
+                                <a href="internships.html" class="view-all-link">View All ?</a>
+                            </div>
+
+                            <div class="events-list">
+                                <div class="event-item">
+                                    <div class="event-icon-badge icon-purple">
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                                            <line x1="16" y1="2" x2="16" y2="6"/>
+                                            <line x1="8" y1="2" x2="8" y2="6"/>
+                                            <line x1="3" y1="10" x2="21" y2="10"/>
+                                        </svg>
+                                    </div>
+                                    <div class="event-text">
+                                        <h5>TCS Interview</h5>
+                                        <p>Apr 25, 2025 . 10:00 AM</p>
+                                    </div>
+                                </div>
+
+                                <div class="event-item">
+                                    <div class="event-icon-badge icon-teal">
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="10"/>
+                                            <polyline points="12 6 12 12 16 14"/>
+                                        </svg>
+                                    </div>
+                                    <div class="event-text">
+                                        <h5>Infosys Follow Up</h5>
+                                        <p>Apr 30, 2025 . 02:00 PM</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- Integrated JS Client -->
+    <script src="js/app.js"></script>
+</body>
+
+</html>

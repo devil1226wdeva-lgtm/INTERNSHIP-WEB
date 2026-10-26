@@ -1,10 +1,10 @@
-# ðŸŽ“ Student Internship Tracker (Project ID: 122601)
+# ?? Student Internship Tracker (Project ID: 122601)
 
 A full-stack Student Internship Management System built with a **Java Spring Boot** backend, **Spring Data JPA**, **Spring Security**, **MySQL**, and an integrated responsive **HTML5/CSS3/Vanilla JavaScript** frontend.
 
 ---
 
-## ðŸ“‹ Table of Contents
+## ?? Table of Contents
 1. [Architecture & Tech Stack](#architecture--tech-stack)
 2. [Prerequisites & Software Requirements](#prerequisites--software-requirements)
 3. [MySQL Database Setup](#mysql-database-setup)
@@ -30,39 +30,39 @@ A full-stack Student Internship Management System built with a **Java Spring Boo
 ### Project Structure
 ```text
 C:\project 122601\
-â”œâ”€â”€ .env.example                                  # Sample environment variables
-â”œâ”€â”€ .tools\apache-maven-3.9.6\                   # Local Maven toolchain
-â”œâ”€â”€ mvnw.cmd                                     # Automated build & run wrapper
-â”œâ”€â”€ pom.xml                                      # Maven dependencies & build configuration
-â”œâ”€â”€ README.md                                    # Comprehensive system documentation
-â”œâ”€â”€ src\
-â”‚   â”œâ”€â”€ main\
-â”‚   â”‚   â”œâ”€â”€ java\com\student\internshiptracker\
-â”‚   â”‚   â”‚   â”œâ”€â”€ InternshipTrackerApplication.java # Spring Boot entry point
-â”‚   â”‚   â”‚   â”œâ”€â”€ config\                           # SecurityConfig, WebConfig, CORS
-â”‚   â”‚   â”‚   â”œâ”€â”€ controller\                       # Auth, Internship, Dashboard, Profile, Settings
-â”‚   â”‚   â”‚   â”œâ”€â”€ dto\                              # Request & Response Transfer Objects
-â”‚   â”‚   â”‚   â”œâ”€â”€ entity\                           # Student, Internship, ApplicationStatus
-â”‚   â”‚   â”‚   â”œâ”€â”€ exception\                        # GlobalExceptionHandler, Custom Exceptions
-â”‚   â”‚   â”‚   â”œâ”€â”€ repository\                       # StudentRepository, InternshipRepository
-â”‚   â”‚   â”‚   â”œâ”€â”€ security\                         # CustomUserDetails, CustomUserDetailsService
-â”‚   â”‚   â”‚   â””â”€â”€ service\                          # Service interfaces & implementations
-â”‚   â”‚   â””â”€â”€ resources\
-â”‚   â”‚       â”œâ”€â”€ application.properties           # Spring Boot & MySQL configuration
-â”‚   â”‚       â”œâ”€â”€ schema.sql                       # Database creation DDL script
-â”‚   â”‚       â””â”€â”€ static\                          # Embedded frontend (HTML, CSS, JS)
-â”‚   â”‚           â”œâ”€â”€ login.html
-â”‚   â”‚           â”œâ”€â”€ register.html
-â”‚   â”‚           â”œâ”€â”€ dashboard.html
-â”‚   â”‚           â”œâ”€â”€ internships.html
-â”‚   â”‚           â”œâ”€â”€ add-internship.html
-â”‚   â”‚           â”œâ”€â”€ profile.html
-â”‚   â”‚           â”œâ”€â”€ settings.html
-â”‚   â”‚           â””â”€â”€ js\app.js                     # Unified frontend API & UI logic
-â”‚   â””â”€â”€ test\
-â”‚       â”œâ”€â”€ java\com\student\internshiptracker\  # 16 Automated Integration & Unit Tests
-â”‚       â””â”€â”€ resources\application.properties     # H2 MySQL-compatibility test configuration
-â””â”€â”€ internship management projct(122601)\         # Original frontend folder (preserved)
+??? .env.example                                  # Sample environment variables
+??? .tools\apache-maven-3.9.6\                   # Local Maven toolchain
+??? mvnw.cmd                                     # Automated build & run wrapper
+??? pom.xml                                      # Maven dependencies & build configuration
+??? README.md                                    # Comprehensive system documentation
+??? src\
+?   ??? main\
+?   ?   ??? java\com\student\internshiptracker\
+?   ?   ?   ??? InternshipTrackerApplication.java # Spring Boot entry point
+?   ?   ?   ??? config\                           # SecurityConfig, WebConfig, CORS
+?   ?   ?   ??? controller\                       # Auth, Internship, Dashboard, Profile, Settings
+?   ?   ?   ??? dto\                              # Request & Response Transfer Objects
+?   ?   ?   ??? entity\                           # Student, Internship, ApplicationStatus
+?   ?   ?   ??? exception\                        # GlobalExceptionHandler, Custom Exceptions
+?   ?   ?   ??? repository\                       # StudentRepository, InternshipRepository
+?   ?   ?   ??? security\                         # CustomUserDetails, CustomUserDetailsService
+?   ?   ?   ??? service\                          # Service interfaces & implementations
+?   ?   ??? resources\
+?   ?       ??? application.properties           # Spring Boot & MySQL configuration
+?   ?       ??? schema.sql                       # Database creation DDL script
+?   ?       ??? static\                          # Embedded frontend (HTML, CSS, JS)
+?   ?           ??? login.html
+?   ?           ??? register.html
+?   ?           ??? dashboard.html
+?   ?           ??? internships.html
+?   ?           ??? add-internship.html
+?   ?           ??? profile.html
+?   ?           ??? settings.html
+?   ?           ??? js\app.js                     # Unified frontend API & UI logic
+?   ??? test\
+?       ??? java\com\student\internshiptracker\  # 16 Automated Integration & Unit Tests
+?       ??? resources\application.properties     # H2 MySQL-compatibility test configuration
+??? internship management projct(122601)\         # Original frontend folder (preserved)
 ```
 
 ---
@@ -183,7 +183,7 @@ The server starts on port `8080`.
 ## 6. Accessing the Frontend
 
 Once the server is running, open your browser and navigate to:
-ðŸ‘‰ **`http://localhost:8080/login.html`** (or simply **`http://localhost:8080/`**)
+?? **`http://localhost:8080/login.html`** (or simply **`http://localhost:8080/`**)
 
 ### Application Pages & Features:
 1. **Register** (`/register.html`): Create a new student account (Username, Email, Password, Name, Student ID).
