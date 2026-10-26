@@ -1,0 +1,12 @@
+[build]
+  publish = "internship management projct(122601)"
+
+[[redirects]]
+  from = "/"
+  to = "/login.html"
+  status = 302
+
+[[redirects]]
+  from = "/*"
+  to = "/login.html"
+  status = 200
