@@ -34,3 +34,7 @@ build/
 ### Environment & Tools ###
 .env
 .tools/
+
+### Node / Netlify ###
+node_modules/
+.netlify/

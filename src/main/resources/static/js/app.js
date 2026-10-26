@@ -3,7 +3,19 @@
  * Apple-inspired Liquid Glass Dashboard System
  */
 
-const API_BASE = ''; // Same-origin when served via Spring Boot
+const API_BASE = ''; // Same-origin API (Netlify Functions)
+
+// Current page name without extension, e.g. "/dashboard" or "/dashboard.html" -> "dashboard".
+// "/" maps to "login" since the login page doubles as the landing page.
+function currentPage() {
+    const last = window.location.pathname.toLowerCase().replace(/\/+$/, '').split('/').pop() || '';
+    return last.replace(/\.html$/, '') || 'login';
+}
+
+function isAuthPage() {
+    const page = currentPage();
+    return page === 'login' || page === 'register';
+}
 
 // Utility: Toast notification with glass styling
 function showToast(message, type = 'success') {
@@ -61,8 +73,7 @@ async function apiRequest(endpoint, options = {}) {
         if (!response.ok) {
             if (response.status === 401) {
                 // If unauthenticated on a protected page, redirect to login
-                const currentPath = window.location.pathname.toLowerCase();
-                if (!currentPath.endsWith('login.html') && !currentPath.endsWith('register.html') && currentPath !== '/' && !currentPath.endsWith('/')) {
+                if (!isAuthPage()) {
                     window.location.href = 'login.html';
                 }
             }
@@ -77,8 +88,7 @@ async function apiRequest(endpoint, options = {}) {
 
 // Navigation & Auth initialization
 async function initAuth() {
-    const currentPath = window.location.pathname.toLowerCase();
-    const isAuthPage = currentPath.endsWith('login.html') || currentPath.endsWith('register.html') || currentPath === '/' || currentPath.endsWith('/');
+    const onAuthPage = isAuthPage();
 
     // Handle logout link clicks
     document.querySelectorAll('.logout-link, a').forEach(link => {
@@ -102,7 +112,7 @@ async function initAuth() {
             const displayName = user.name || user.username || 'Student';
 
             // If user is already logged in and visits login or register, redirect to dashboard
-            if (isAuthPage) {
+            if (onAuthPage) {
                 window.location.href = 'dashboard.html';
                 return;
             }
@@ -139,7 +149,7 @@ async function initAuth() {
         }
     } catch (err) {
         // Not authenticated
-        if (!isAuthPage) {
+        if (!onAuthPage) {
             window.location.href = 'login.html';
         }
     }
@@ -646,20 +656,15 @@ function debounce(func, wait) {
 document.addEventListener('DOMContentLoaded', () => {
     initAuth();
 
-    const path = window.location.pathname.toLowerCase();
-    if (path.endsWith('login.html') || path === '/' || path.endsWith('/')) {
-        initLoginPage();
-    } else if (path.endsWith('register.html')) {
-        initRegisterPage();
-    } else if (path.endsWith('dashboard.html')) {
-        initDashboardPage();
-    } else if (path.endsWith('internships.html')) {
-        initInternshipsPage();
-    } else if (path.endsWith('add-internship.html')) {
-        initAddInternshipPage();
-    } else if (path.endsWith('profile.html')) {
-        initProfilePage();
-    } else if (path.endsWith('settings.html')) {
-        initSettingsPage();
-    }
+    const pageInits = {
+        'login': initLoginPage,
+        'register': initRegisterPage,
+        'dashboard': initDashboardPage,
+        'internships': initInternshipsPage,
+        'add-internship': initAddInternshipPage,
+        'profile': initProfilePage,
+        'settings': initSettingsPage
+    };
+    const init = pageInits[currentPage()];
+    if (init) init();
 });
