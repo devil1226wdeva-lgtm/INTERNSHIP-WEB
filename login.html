@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Student Internship Tracker</title>
+    <link rel="stylesheet" href="css/liquid-glass.css">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="auth-wrapper">
+        <section class="auth-card">
+
+            <!-- Brand Icon -->
+            <div class="auth-icon-circle">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+            </div>
+
+            <!-- Login Header -->
+            <h2>Welcome Back</h2>
+            <p>Login to your Student Internship Tracker</p>
+
+            <!-- Login Form -->
+            <form action="dashboard.html" method="get" style="text-align: left;">
+
+                <div class="form-group-glass">
+                    <label for="username">Username or Email</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username or email" required autofocus>
+                </div>
+
+                <div class="form-group-glass">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+
+                <button type="submit" class="btn-glass-primary" style="width: 100%; justify-content: center; padding: 13px; font-size: 15px; margin-top: 14px;">
+                    Login
+                </button>
+
+            </form>
+
+            <div style="margin-top: 24px; font-size: 13.5px; color: var(--text-secondary);">
+                <p style="margin-bottom: 8px;">
+                    Don't have an account? 
+                    <a href="register.html" style="color: #60a5fa; font-weight: 600; text-decoration: none;">Register here</a>
+                </p>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 12px;">Student Internship Tracker &copy; 2026</p>
+            </div>
+
+        </section>
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>
