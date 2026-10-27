@@ -52,6 +52,16 @@ function showToast(message, type = 'success') {
 // this handles all CRUD & auth seamlessly in localStorage.
 // ===================================================================
 const ClientStore = {
+    isLoggedIn() {
+        return localStorage.getItem('sit_logged_in') === 'true';
+    },
+    setLoggedIn(status) {
+        if (status) {
+            localStorage.setItem('sit_logged_in', 'true');
+        } else {
+            localStorage.removeItem('sit_logged_in');
+        }
+    },
     getStudent() {
         let student = localStorage.getItem('sit_student');
         if (!student) {
@@ -176,15 +186,20 @@ function handleClientFallback(endpoint, options = {}) {
 
     // Auth
     if (path === '/api/auth/me') {
+        if (!ClientStore.isLoggedIn()) {
+            return { success: false, message: 'Unauthenticated', data: null };
+        }
         return { success: true, data: ClientStore.getStudent() };
     }
     if (path === '/api/auth/login') {
+        ClientStore.setLoggedIn(true);
         const user = ClientStore.getStudent();
         if (body.username) user.username = body.username;
         ClientStore.saveStudent(user);
         return { success: true, message: 'Login successful', data: user };
     }
     if (path === '/api/auth/register') {
+        ClientStore.setLoggedIn(true);
         const user = ClientStore.saveStudent({
             username: body.username || 'student',
             email: body.email || '',
@@ -193,6 +208,7 @@ function handleClientFallback(endpoint, options = {}) {
         return { success: true, message: 'Registration successful', data: user };
     }
     if (path === '/api/auth/logout') {
+        ClientStore.setLoggedIn(false);
         return { success: true, message: 'Logged out' };
     }
 
@@ -319,6 +335,7 @@ async function initAuth() {
             link.addEventListener('click', async (e) => {
                 if (link.textContent.trim().toLowerCase() === 'logout' || link.classList.contains('logout-link')) {
                     e.preventDefault();
+                    ClientStore.setLoggedIn(false);
                     try {
                         await fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' });
                     } catch (err) {}
@@ -368,6 +385,10 @@ async function initAuth() {
             const welcomeHeader = document.querySelector('.welcome h2');
             if (welcomeHeader) {
                 welcomeHeader.textContent = `Welcome, ${displayName}! 👋`;
+            }
+        } else {
+            if (!isAuthPage) {
+                window.location.href = 'login.html';
             }
         }
     } catch (err) {
