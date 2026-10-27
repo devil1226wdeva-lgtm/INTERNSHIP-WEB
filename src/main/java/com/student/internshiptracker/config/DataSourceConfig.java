@@ -10,8 +10,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.DriverManager;
 
 @Configuration
 public class DataSourceConfig {
@@ -19,45 +17,34 @@ public class DataSourceConfig {
     private static final Logger log = LoggerFactory.getLogger(DataSourceConfig.class);
 
     @Value("${spring.datasource.url}")
-    private String mysqlUrl;
+    private String dbUrl;
 
     @Value("${spring.datasource.username}")
-    private String mysqlUsername;
+    private String dbUsername;
 
     @Value("${spring.datasource.password:}")
-    private String mysqlPassword;
+    private String dbPassword;
 
     @Bean
     @Primary
     public DataSource dataSource() {
-        log.info("Attempting connection to MySQL at: {}", mysqlUrl);
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            try (Connection conn = DriverManager.getConnection(mysqlUrl, mysqlUsername, mysqlPassword)) {
-                log.info("=================================================");
-                log.info("? Successfully connected to MySQL Server 8.0!");
-                log.info("=================================================");
-                HikariConfig config = new HikariConfig();
-                config.setJdbcUrl(mysqlUrl);
-                config.setUsername(mysqlUsername);
-                config.setPassword(mysqlPassword);
-                config.setDriverClassName("com.mysql.cj.jdbc.Driver");
-                return new HikariDataSource(config);
-            }
-        } catch (Exception ex) {
-            log.warn("=================================================");
-            log.warn("?? MySQL connection failed: {}", ex.getMessage());
-            log.warn("Falling back to local persistent database (./data/internship_tracker) in MySQL mode.");
-            log.warn("This allows the app to localhost immediately on http://localhost:8080 without downtime!");
-            log.warn("To connect to MySQL, configure your password in application.properties or set $env:SPRING_DATASOURCE_PASSWORD.");
-            log.warn("=================================================");
+        log.info("=================================================");
+        log.info("Connecting to Supabase PostgreSQL at: {}", dbUrl);
+        log.info("=================================================");
 
-            HikariConfig fallbackConfig = new HikariConfig();
-            fallbackConfig.setJdbcUrl("jdbc:h2:file:./data/internship_tracker;AUTO_SERVER=TRUE;MODE=MySQL;DB_CLOSE_DELAY=-1");
-            fallbackConfig.setDriverClassName("org.h2.Driver");
-            fallbackConfig.setUsername("sa");
-            fallbackConfig.setPassword("");
-            return new HikariDataSource(fallbackConfig);
-        }
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl(dbUrl);
+        config.setUsername(dbUsername);
+        config.setPassword(dbPassword);
+        config.setDriverClassName("org.postgresql.Driver");
+        config.setConnectionTimeout(30000);
+        config.setMaximumPoolSize(5);
+        config.setMinimumIdle(1);
+        config.setIdleTimeout(300000);
+        config.setConnectionTestQuery("SELECT 1");
+
+        HikariDataSource ds = new HikariDataSource(config);
+        log.info("✅ Supabase PostgreSQL connection pool initialized!");
+        return ds;
     }
 }
