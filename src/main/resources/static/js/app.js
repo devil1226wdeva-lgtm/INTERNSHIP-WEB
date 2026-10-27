@@ -67,9 +67,9 @@ const ClientStore = {
         if (!student) {
             student = {
                 id: 1,
-                username: 'student',
-                name: 'Deva Student',
-                email: 'deva@example.com',
+                username: 'Student',
+                name: 'Student',
+                email: 'student@example.com',
                 studentId: 'STU-2026-001',
                 department: 'Computer Science & Engineering',
                 year: '3rd Year',
@@ -194,7 +194,10 @@ function handleClientFallback(endpoint, options = {}) {
     if (path === '/api/auth/login') {
         ClientStore.setLoggedIn(true);
         const user = ClientStore.getStudent();
-        if (body.username) user.username = body.username;
+        if (body.username) {
+            user.username = body.username;
+            user.name = body.username;
+        }
         ClientStore.saveStudent(user);
         return { success: true, message: 'Login successful', data: user };
     }
@@ -349,7 +352,7 @@ async function initAuth() {
         const res = await apiRequest('/api/auth/me');
         if (res && res.success && res.data) {
             const user = res.data;
-            const displayName = user.name || user.username || 'Student';
+            const displayName = user.username || user.name || 'Student';
 
             // If user is already logged in and visits login or register, redirect to dashboard
             if (isAuthPage) {
@@ -378,7 +381,9 @@ async function initAuth() {
             // Update Dashboard Greeting
             const welcomeGreeting = document.getElementById('welcomeGreeting');
             if (welcomeGreeting) {
-                welcomeGreeting.textContent = `Good Morning, ${displayName}! 👋`;
+                const hour = new Date().getHours();
+                const timeGreeting = hour < 12 ? 'Good Morning' : (hour < 18 ? 'Good Afternoon' : 'Good Evening');
+                welcomeGreeting.textContent = `${timeGreeting}, ${displayName}! 👋`;
             }
 
             // Fallback for legacy selector
