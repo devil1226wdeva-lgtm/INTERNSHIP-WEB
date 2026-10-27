@@ -151,15 +151,16 @@ const ClientStore = {
     },
     getStats() {
         const list = this.getInternships();
+        const getCount = (st) => list.filter(i => (i.status || '').toUpperCase() === st.toUpperCase()).length;
         return {
             total: list.length,
-            applications: list.filter(i => i.status === 'APPLIED').length,
-            interviews: list.filter(i => i.status === 'INTERVIEW').length,
-            selected: list.filter(i => i.status === 'SELECTED').length,
-            rejected: list.filter(i => i.status === 'REJECTED').length,
-            completed: list.filter(i => i.status === 'COMPLETED').length,
-            interested: list.filter(i => i.status === 'INTERESTED').length,
-            assessment: list.filter(i => i.status === 'ASSESSMENT').length
+            applications: getCount('APPLIED'),
+            interviews: getCount('INTERVIEW'),
+            selected: getCount('SELECTED'),
+            rejected: getCount('REJECTED'),
+            completed: getCount('COMPLETED'),
+            interested: getCount('INTERESTED'),
+            assessment: getCount('ASSESSMENT')
         };
     }
 };
@@ -292,7 +293,7 @@ async function apiRequest(endpoint, options = {}) {
         const data = await response.json().catch(() => null);
         if (response.status === 401) {
             const currentPath = window.location.pathname.toLowerCase();
-            if (!currentPath.endsWith('login.html') && !currentPath.endsWith('register.html') && currentPath !== '/' && !currentPath.endsWith('/')) {
+            if (!currentPath.includes('login') && !currentPath.includes('register') && currentPath !== '/' && !currentPath.endsWith('/')) {
                 window.location.href = 'login.html';
             }
         }
@@ -310,7 +311,7 @@ async function apiRequest(endpoint, options = {}) {
 // Navigation & Auth initialization
 async function initAuth() {
     const currentPath = window.location.pathname.toLowerCase();
-    const isAuthPage = currentPath.endsWith('login.html') || currentPath.endsWith('register.html') || currentPath === '/' || currentPath.endsWith('/');
+    const isAuthPage = currentPath.includes('login') || currentPath.includes('register') || currentPath === '/' || currentPath.endsWith('/');
 
     // Handle logout link clicks
     document.querySelectorAll('.logout-link, a').forEach(link => {
@@ -879,19 +880,19 @@ document.addEventListener('DOMContentLoaded', () => {
     initAuth();
 
     const path = window.location.pathname.toLowerCase();
-    if (path.endsWith('login.html') || path === '/' || path.endsWith('/')) {
-        initLoginPage();
-    } else if (path.endsWith('register.html')) {
-        initRegisterPage();
-    } else if (path.endsWith('dashboard.html')) {
-        initDashboardPage();
-    } else if (path.endsWith('internships.html')) {
-        initInternshipsPage();
-    } else if (path.endsWith('add-internship.html')) {
+    if (path.includes('add-internship')) {
         initAddInternshipPage();
-    } else if (path.endsWith('profile.html')) {
+    } else if (path.includes('internships')) {
+        initInternshipsPage();
+    } else if (path.includes('dashboard')) {
+        initDashboardPage();
+    } else if (path.includes('profile')) {
         initProfilePage();
-    } else if (path.endsWith('settings.html')) {
+    } else if (path.includes('settings')) {
         initSettingsPage();
+    } else if (path.includes('register')) {
+        initRegisterPage();
+    } else if (path.includes('login') || path === '/' || path.endsWith('/')) {
+        initLoginPage();
     }
 });
