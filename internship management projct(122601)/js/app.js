@@ -46,7 +46,230 @@ function showToast(message, type = 'success') {
     }, 3500);
 }
 
-// Utility: Standard Fetch with session credentials
+// ===================================================================
+// Client-Side Fallback Engine (for Netlify / Vercel static deployments)
+// When Spring Boot /api is unavailable (e.g. 404 on static hosting),
+// this handles all CRUD & auth seamlessly in localStorage.
+// ===================================================================
+const ClientStore = {
+    getStudent() {
+        let student = localStorage.getItem('sit_student');
+        if (!student) {
+            student = {
+                id: 1,
+                username: 'student',
+                name: 'Deva Student',
+                email: 'deva@example.com',
+                studentId: 'STU-2026-001',
+                department: 'Computer Science & Engineering',
+                year: '3rd Year',
+                college: 'College of Engineering & Technology',
+                skills: 'Java, Spring Boot, React, MySQL, Supabase, Git',
+                theme: 'light',
+                emailUpdates: true,
+                applicationReminders: true
+            };
+            localStorage.setItem('sit_student', JSON.stringify(student));
+        } else {
+            student = JSON.parse(student);
+        }
+        return student;
+    },
+    saveStudent(data) {
+        const current = this.getStudent();
+        const updated = Object.assign({}, current, data);
+        localStorage.setItem('sit_student', JSON.stringify(updated));
+        return updated;
+    },
+    getInternships() {
+        let list = localStorage.getItem('sit_internships');
+        if (!list) {
+            list = [
+                {
+                    id: 1,
+                    company: 'Google',
+                    role: 'Software Engineering Intern',
+                    location: 'Bangalore / Hybrid',
+                    appliedDate: '2026-10-15',
+                    status: 'INTERVIEW',
+                    internshipType: 'Full-time',
+                    description: 'Distributed systems and cloud infrastructure',
+                    websiteUrl: 'https://careers.google.com',
+                    notes: 'Technical round scheduled'
+                },
+                {
+                    id: 2,
+                    company: 'Microsoft',
+                    role: 'Full Stack Development Intern',
+                    location: 'Hyderabad',
+                    appliedDate: '2026-10-18',
+                    status: 'SELECTED',
+                    internshipType: 'Internship',
+                    description: 'Azure Cloud services and modern web experiences',
+                    websiteUrl: 'https://careers.microsoft.com',
+                    notes: 'Offer letter received'
+                },
+                {
+                    id: 3,
+                    company: 'Amazon',
+                    role: 'Backend SDE Intern',
+                    location: 'Chennai',
+                    appliedDate: '2026-10-22',
+                    status: 'APPLIED',
+                    internshipType: 'Full-time',
+                    description: 'AWS high-throughput transaction processing',
+                    websiteUrl: 'https://amazon.jobs',
+                    notes: 'Online assessment completed'
+                }
+            ];
+            localStorage.setItem('sit_internships', JSON.stringify(list));
+        } else {
+            list = JSON.parse(list);
+        }
+        return list;
+    },
+    saveInternship(item) {
+        const list = this.getInternships();
+        if (item.id) {
+            const idx = list.findIndex(i => String(i.id) === String(item.id));
+            if (idx !== -1) {
+                list[idx] = Object.assign({}, list[idx], item);
+            } else {
+                list.unshift(item);
+            }
+        } else {
+            item.id = Date.now();
+            list.unshift(item);
+        }
+        localStorage.setItem('sit_internships', JSON.stringify(list));
+        return item;
+    },
+    deleteInternship(id) {
+        let list = this.getInternships();
+        list = list.filter(i => String(i.id) !== String(id));
+        localStorage.setItem('sit_internships', JSON.stringify(list));
+    },
+    getStats() {
+        const list = this.getInternships();
+        return {
+            total: list.length,
+            applications: list.filter(i => i.status === 'APPLIED').length,
+            interviews: list.filter(i => i.status === 'INTERVIEW').length,
+            selected: list.filter(i => i.status === 'SELECTED').length,
+            rejected: list.filter(i => i.status === 'REJECTED').length,
+            completed: list.filter(i => i.status === 'COMPLETED').length,
+            interested: list.filter(i => i.status === 'INTERESTED').length,
+            assessment: list.filter(i => i.status === 'ASSESSMENT').length
+        };
+    }
+};
+
+function handleClientFallback(endpoint, options = {}) {
+    const method = (options.method || 'GET').toUpperCase();
+    const url = new URL(endpoint, 'http://localhost');
+    const path = url.pathname;
+    let body = {};
+    if (options.body) {
+        try { body = typeof options.body === 'string' ? JSON.parse(options.body) : options.body; } catch (e) {}
+    }
+
+    // Auth
+    if (path === '/api/auth/me') {
+        return { success: true, data: ClientStore.getStudent() };
+    }
+    if (path === '/api/auth/login') {
+        const user = ClientStore.getStudent();
+        if (body.username) user.username = body.username;
+        ClientStore.saveStudent(user);
+        return { success: true, message: 'Login successful', data: user };
+    }
+    if (path === '/api/auth/register') {
+        const user = ClientStore.saveStudent({
+            username: body.username || 'student',
+            email: body.email || '',
+            name: body.name || body.username || 'Student'
+        });
+        return { success: true, message: 'Registration successful', data: user };
+    }
+    if (path === '/api/auth/logout') {
+        return { success: true, message: 'Logged out' };
+    }
+
+    // Profile
+    if (path === '/api/profile') {
+        if (method === 'GET') {
+            return { success: true, data: ClientStore.getStudent() };
+        }
+        if (method === 'PUT' || method === 'POST') {
+            const updated = ClientStore.saveStudent(body);
+            return { success: true, message: 'Profile updated successfully!', data: updated };
+        }
+    }
+
+    // Settings
+    if (path.startsWith('/api/settings')) {
+        if (method === 'GET') {
+            return { success: true, data: ClientStore.getStudent() };
+        }
+        const updated = ClientStore.saveStudent(body);
+        return { success: true, message: 'Settings saved successfully!', data: updated };
+    }
+
+    // Dashboard
+    if (path === '/api/dashboard/stats') {
+        return { success: true, data: ClientStore.getStats() };
+    }
+    if (path === '/api/dashboard/recent') {
+        return { success: true, data: ClientStore.getInternships().slice(0, 5) };
+    }
+
+    // Internships CRUD
+    if (path === '/api/internships') {
+        if (method === 'GET') {
+            let list = ClientStore.getInternships();
+            const status = url.searchParams.get('status');
+            const search = url.searchParams.get('search');
+            const type = url.searchParams.get('type');
+            if (status && status !== 'ALL') {
+                list = list.filter(i => (i.status || '').toUpperCase() === status.toUpperCase());
+            }
+            if (type && type !== 'ALL') {
+                list = list.filter(i => (i.internshipType || '').toUpperCase() === type.toUpperCase());
+            }
+            if (search) {
+                const q = search.toLowerCase();
+                list = list.filter(i => (i.company || '').toLowerCase().includes(q) || (i.role || '').toLowerCase().includes(q));
+            }
+            return { success: true, data: list };
+        }
+        if (method === 'POST') {
+            const created = ClientStore.saveInternship(body);
+            return { success: true, message: 'Internship added successfully!', data: created };
+        }
+    }
+
+    const matchId = path.match(/^\/api\/internships\/(\w+)$/);
+    if (matchId) {
+        const id = matchId[1];
+        if (method === 'GET') {
+            const item = ClientStore.getInternships().find(i => String(i.id) === String(id));
+            return { success: true, data: item };
+        }
+        if (method === 'PUT') {
+            body.id = id;
+            const updated = ClientStore.saveInternship(body);
+            return { success: true, message: 'Internship updated successfully!', data: updated };
+        }
+        if (method === 'DELETE') {
+            ClientStore.deleteInternship(id);
+            return { success: true, message: 'Internship deleted successfully' };
+        }
+    }
+
+    return { success: true, data: null };
+}
+
+// Utility: Standard Fetch with session credentials & static host fallback
 async function apiRequest(endpoint, options = {}) {
     options.credentials = 'same-origin';
     options.headers = Object.assign({
@@ -56,21 +279,30 @@ async function apiRequest(endpoint, options = {}) {
 
     try {
         const response = await fetch(API_BASE + endpoint, options);
-        const data = await response.json().catch(() => null);
 
-        if (!response.ok) {
-            if (response.status === 401) {
-                // If unauthenticated on a protected page, redirect to login
-                const currentPath = window.location.pathname.toLowerCase();
-                if (!currentPath.endsWith('login.html') && !currentPath.endsWith('register.html') && currentPath !== '/' && !currentPath.endsWith('/')) {
-                    window.location.href = 'login.html';
-                }
-            }
-            const errorMsg = (data && data.message) ? data.message : `Request failed with status ${response.status}`;
-            throw new Error(errorMsg);
+        if (response.ok) {
+            return await response.json().catch(() => null);
         }
-        return data;
+
+        // On static hosting (like Netlify / Vercel), server endpoints return 404
+        if (response.status === 404) {
+            return handleClientFallback(endpoint, options);
+        }
+
+        const data = await response.json().catch(() => null);
+        if (response.status === 401) {
+            const currentPath = window.location.pathname.toLowerCase();
+            if (!currentPath.endsWith('login.html') && !currentPath.endsWith('register.html') && currentPath !== '/' && !currentPath.endsWith('/')) {
+                window.location.href = 'login.html';
+            }
+        }
+        const errorMsg = (data && data.message) ? data.message : `Request failed with status ${response.status}`;
+        throw new Error(errorMsg);
     } catch (err) {
+        // Fallback for static hosting or network offline
+        if (err.message && (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message.includes('404'))) {
+            return handleClientFallback(endpoint, options);
+        }
         throw err;
     }
 }
@@ -128,13 +360,13 @@ async function initAuth() {
             // Update Dashboard Greeting
             const welcomeGreeting = document.getElementById('welcomeGreeting');
             if (welcomeGreeting) {
-                welcomeGreeting.textContent = `Good Morning, ${displayName}! ??`;
+                welcomeGreeting.textContent = `Good Morning, ${displayName}! 👋`;
             }
 
             // Fallback for legacy selector
             const welcomeHeader = document.querySelector('.welcome h2');
             if (welcomeHeader) {
-                welcomeHeader.textContent = `Welcome, ${displayName}! ??`;
+                welcomeHeader.textContent = `Welcome, ${displayName}! 👋`;
             }
         }
     } catch (err) {
